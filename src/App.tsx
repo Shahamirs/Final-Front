@@ -7,7 +7,9 @@ import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
 import { Event } from './pages/Event';
 import { Chat } from './pages/Chat';
-import { Chats } from './pages/Chats'
+import { Chats } from './pages/Chats';
+import { Events } from './pages/Events';
+import { UserProfile } from './pages/UserProfile';
 
 function App() {
   return (
@@ -17,10 +19,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/event/:id" element={<ProtectedRoute><Event /></ProtectedRoute>} />
           <Route path="/chat/:userId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/chats" element={<ProtectedRoute><Chats /></ProtectedRoute>} />
+          <Route path="/user/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
         </Routes>
       </Layout>
     </Router>

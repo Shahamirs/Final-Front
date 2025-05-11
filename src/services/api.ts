@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { User } from '../types/user';
+import { Message } from '../types/message';
+import { Event } from '../types/event';
 
 const api = axios.create({
   baseURL: 'https://final-d42fd-default-rtdb.europe-west1.firebasedatabase.app/',
@@ -6,38 +9,33 @@ const api = axios.create({
 
 export default api;
 
-// Тип пользователя
-export interface User {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  interests: string[];
-}
-
-// Регистрация пользователя
-export const registerUser = async (user: Omit<User, 'id'>) => {
-  const response = await api.post('/users.json', user);
-  const id = response.data.name; // Firebase возвращает ID в поле name
-  return { id, ...user };
+export const registerUser = async (user: Omit<User, 'id'> & { password: string }) => {
+  const id = Math.random().toString(36).substr(2, 9); // Генерация случайного ID
+  const userData = { email: user.email, name: user.name, interests: user.interests };
+  await api.put(`/users/${id}.json`, userData);
+  return { id, ...userData };
 };
 
-// Вход пользователя
-export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (email: string) => {
   const response = await api.get('/users.json');
-  const users = response.data;
-  for (const key in users) {
-    if (users[key].email === email && users[key].password === password) {
-      return { id: key, ...users[key] };
-    }
-  }
-  throw new Error('Invalid credentials');
+  const users = Object.entries(response.data).map(([id, user]) => ({ id, ...user }));
+  const user = users.find((u) => u.email === email);
+  if (!user) throw new Error('User not found');
+  return user;
 };
 
-// Получение списка пользователей
+export const updateUser = async (userId: string, updatedData: Partial<User>) => {
+  await api.patch(`/users/${userId}.json`, updatedData);
+};
+
 export const getUsers = async () => {
   const response = await api.get('/users.json');
   return Object.entries(response.data).map(([id, user]) => ({ id, ...user }));
+};
+
+export const getUserById = async (userId: string) => {
+  const response = await api.get(`/users/${userId}.json`);
+  return { id: userId, ...response.data };
 };
 
 export const sendMessage = async (chatId: string, message: Omit<Message, 'id'>) => {
@@ -48,31 +46,6 @@ export const getMessages = async (chatId: string) => {
   const response = await api.get(`/messages/${chatId}.json`);
   if (!response.data) return [];
   return Object.entries(response.data).map(([id, message]) => ({ id, ...message }));
-};
-
-export const createEvent = async (event: Omit<Event, 'id'>) => {
-  const response = await api.post('/events.json', event);
-  const id = response.data.name;
-  return { id, ...event };
-};
-
-export const getEvents = async () => {
-  const response = await api.get('/events.json');
-  if (!response.data) return [];
-  return Object.entries(response.data).map(([id, event]) => ({ id, ...event }));
-};
-
-export const joinEvent = async (eventId: string, userId: string) => {
-  const event = await api.get(`/events/${eventId}.json`).then((res) => res.data);
-  const participants = event.participants || [];
-  if (!participants.includes(userId)) {
-    participants.push(userId);
-    await api.patch(`/events/${eventId}.json`, { participants });
-  }
-};
-
-export const updateUser = async (userId: string, updatedData: Partial<User>) => {
-  await api.patch(`/users/${userId}.json`, updatedData);
 };
 
 export const getUserChats = async (userId: string) => {
@@ -88,6 +61,18 @@ export const getUserChats = async (userId: string) => {
   return userChats;
 };
 
+export const createEvent = async (event: Omit<Event, 'id'>) => {
+  const response = await api.post('/events.json', event);
+  const id = response.data.name;
+  return { id, ...event };
+};
+
+export const getEvents = async () => {
+  const response = await api.get('/events.json');
+  if (!response.data) return [];
+  return Object.entries(response.data).map(([id, event]) => ({ id, ...event }));
+};
+
 export const getEvent = async (eventId: string) => {
   const response = await api.get(`/events/${eventId}.json`);
   return { id: eventId, ...response.data };
@@ -95,4 +80,13 @@ export const getEvent = async (eventId: string) => {
 
 export const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
   await api.patch(`/events/${eventId}.json`, updatedData);
+};
+
+export const joinEvent = async (eventId: string, userId: string) => {
+  const event = await api.get(`/events/${eventId}.json`).then((res) => res.data);
+  const participants = event.participants || [];
+  if (!participants.includes(userId)) {
+    participants.push(userId);
+    await api.patch(`/events/${eventId}.json`, { participants });
+  }
 };

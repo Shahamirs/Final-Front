@@ -21,6 +21,8 @@ export const Layout = ({ children }: { children: JSX.Element }) => {
           </Typography>
           {user ? (
             <>
+              <Button color="inherit" onClick={() => navigate('/')}>Home</Button>
+              <Button color="inherit" onClick={() => navigate('/events')}>Events</Button>
               <Button color="inherit" onClick={() => navigate('/chats')}>Chats</Button>
               <Button color="inherit" onClick={() => navigate('/profile')}>Profile</Button>
               <Button color="inherit" onClick={handleLogout}>Logout</Button>
