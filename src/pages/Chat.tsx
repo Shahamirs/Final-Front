@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { TextField, Button, Typography } from '@mui/material';
 import { sendMessage, getMessages } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { Message } from '../types/message';
+import type { Message } from '../types/message';
 
 export const Chat = () => {
   const { userId } = useParams<{ userId: string }>();

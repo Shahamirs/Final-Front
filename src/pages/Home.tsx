@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Typography, List, ListItem, ListItemText } from '@mui/material';
 import { getUsers } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 
 export const Home = () => {
   const currentUser = useAuthStore((state) => state.user);

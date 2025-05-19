@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { getUserById } from '../services/api';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 
 export const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>();

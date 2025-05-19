@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, List, ListItem, ListItemText, Button } from '@mui/material';
 import { getUserChats, getUsers } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 
 export const Chats = () => {
   const currentUser = useAuthStore((state) => state.user);
