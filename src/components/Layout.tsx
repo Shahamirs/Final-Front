@@ -35,7 +35,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        My App
+        Habitop
       </Typography>
       <List>
         {menuItems.map((item) => (
@@ -52,7 +52,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            My App
+            Habitop
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {menuItems.map((item) => (

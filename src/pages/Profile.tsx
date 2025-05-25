@@ -13,7 +13,7 @@ export const Profile = () => {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [isEditing, setIsEditing] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<ProfileForm>({
+  const { register, handleSubmit} = useForm<ProfileForm>({
     defaultValues: {
       name: user?.name,
       interests: user?.interests.join(', '),
