@@ -39,7 +39,7 @@ export const Chat = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <Typography variant="h4">Chat with {userId}</Typography>
+      <Typography variant="h4">Chating Page</Typography>
       <div>
         {messages.map((msg) => (
           <div key={msg.id}>
